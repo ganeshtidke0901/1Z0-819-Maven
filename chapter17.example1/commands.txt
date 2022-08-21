@@ -1,0 +1,40 @@
+jdeps --jdk-internals a.jar
+
+
+Migration:
+
+Step1-old project:
+
+javac -d classes/. uk/co/brentwood/warley1/ABC.java
+javac -cp classes;. com/app/warley2/XYZ.java
+jar -cvf jars/abc.jar -C classes uk/co/brentwood/warley1
+javac -cp classes;. -d classes com/app/warley2/XYZ.java
+
+
+
+Step2: Bottom-up Approach-convert abc.jar into module 
+1.copied all java files to abc_mod
+2.javac   abc_mod/uk/co/brentwood/warley1/ABC.java abc_mod/module-info.java
+3.jar -cvf mods/abc.jar -C abc_mod  .
+
+run the program(here abc.jar is module and XYZ is on jar-considered classes as of now for XYZ)
+java -cp classes;mods/* com.app.warley2.XYZ 
+
+Step3. convert xyz.jar into module
+javac  -p mods xyz_mod/com/app/warley2/XYZ.java xyz_mod/module-info.java
+jar -cvf mods/xyz.jar -C xyz_mod .
+
+Run  modulerized project now
+java -p mods -m xyz/com.app.warley2.XYZ
+
+---------for top bottom approach - create XYZ as module and run everything in modulerized fashion using -p and -m instead -cp
+step1. convert xyz.jar into module where xyz.jar does not requires abc or may be as automatic modules are given names by java
+run xyz.jar- here abc is still  used as automatic module which is simple jar
+
+javac  -p jars xyz_mod/com/app/warley2/XYZ.java xyz_mod/module-info.java
+>java -p mods;jars -m xyz/com.app.warley2.XYZ
+
+step2. convert abc into module and xyz.jar requires abc
+and run everythign as module
+here abc.jar is module
+java -p mods -m xyz/com.app.warley2.XYZ

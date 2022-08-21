@@ -1,0 +1,68 @@
+javac -p mods -d talks talks/zoo/animal/talks/media/Announcement.java /talks/*.java
+java -p mods -m zoo.animal.talks/zoo.animal.talks.media.Announcement
+
+
+
+// Describe 
+
+java -p mods -d zoo.animal.feeding
+
+zoo.animal.feeding file:///C:/Users/ganes/OneDrive/Desktop/1Z0-819/chapter11.example1/mods/zoo.animal.feeding.jar
+exports zoo.animal.feeding
+requires java.base mandated
+
+java -p mods --describe-module zoo.animal.feeding
+zoo.animal.feeding file:///C:/Users/ganes/OneDrive/Desktop/1Z0-819/chapter11.example1/mods/zoo.animal.feeding.jar
+exports zoo.animal.feeding
+requires java.base mandated
+
+
+java -p mods --describe-module zoo.animal.care
+zoo.animal.care file:///C:/Users/ganes/OneDrive/Desktop/1Z0-819/chapter11.example1/mods/zoo.animal.care1.jar
+exports zoo.animal.care.medical
+requires java.base mandated
+requires zoo.animal.feeding
+contains zoo.animal.care.details
+
+
+jar -f mods/zoo.animal.feeding.jar -d
+zoo.animal.feeding jar:file:///C:/Users/ganes/OneDrive/Desktop/1Z0-819/chapter11.example1/mods/zoo.animal.feeding.jar/!module-info.class
+exports zoo.animal.feeding
+requires java.base mandated
+
+
+
+
+
+//Listng Available modules
+
+java --list-modules -p mods 
+java --list-modules 
+
+
+//Showing module resolution
+java --show-module-resolution -p feeding -m zoo.animal.feeding/zoo.animal.feeding.Task
+
+
+
+//Jdeps 
+
+jdeps -s mods/zoo.animal.feeding.jar
+zoo.animal.feeding -> java.base
+
+jdeps -summary mods/zoo.animal.feeding.jar
+zoo.animal.feeding -> java.base
+
+jdeps -summary mods/zoo.animal.care1.jar mods/zoo.animal.feeding.jar
+zoo.animal.care -> java.base
+zoo.animal.care -> zoo.animal.feeding
+zoo.animal.feeding -> java.base
+
+
+jdeps -summary --module-path mods mods/zoo.animal.care1.jar
+zoo.animal.care -> java.base
+zoo.animal.care -> zoo.animal.feeding
+
+
+
+

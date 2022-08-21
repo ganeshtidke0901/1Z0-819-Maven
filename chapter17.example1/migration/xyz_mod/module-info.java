@@ -1,0 +1,4 @@
+module xyz {
+
+    requires abc;
+}
